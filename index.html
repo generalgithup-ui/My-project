@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Rental System (20 Vehicles)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .car-card img {
+      height: 180px;
+      object-fit: cover;
+    }
+    .hero-banner {
+      background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 35px 15px;
+      border-radius: 0 0 15px 15px;
+    }
+    @media (max-width: 576px) {
+      .hero-banner { padding: 25px 10px; }
+      .hero-banner h1 { font-size: 1.6rem; }
+      .car-card img { height: 160px; }
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#"><i class="bi-car-front-fill me-2 text-warning"></i>DriveEasy</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto my-2 my-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="#" onclick="showSection('customer-browse')"><i class="bi-grid me-1"></i> Available Cars</a>
+          </li>
+          <li class="nav-item" id="nav-my-rentals">
+            <a class="nav-link" href="#" onclick="showSection('customer-dashboard')"><i class="bi-journal-check me-1"></i> My Rentals</a>
+          </li>
+          <li class="nav-item d-none" id="nav-admin">
+            <a class="nav-link text-warning" href="#" onclick="showSection('admin-dashboard')"><i class="bi-shield-lock me-1"></i> Admin Panel</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-light small" id="user-display"><i class="bi-person-circle"></i> Guest</span>
+          <button class="btn btn-outline-light btn-sm" id="auth-btn" data-bs-toggle="modal" data-bs-target="#authModal">Login / Register</button>
+          <button class="btn btn-warning btn-sm d-none" id="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero-banner text-center mb-4 shadow-sm">
+    <div class="container">
+      <h1 class="fw-bold">Find & Rent Your Car</h1>
+      <p class="lead mb-0 fs-6">Easy booking, clear daily rates, instant rental.</p>
+    </div>
+  </div>
+
+  <div class="container mb-5">
+
+    <section id="customer-browse">
+      <div class="row align-items-center mb-3 g-2">
+        <div class="col-12 col-md-6">
+          <h4 class="fw-bold mb-0"><i class="bi-car-front me-2"></i>Choose a Vehicle (20 Available)</h4>
+        </div>
+        <div class="col-12 col-md-6">
+          <input type="text" class="form-control" id="searchInput" onkeyup="filterCars()" placeholder="Search car name or type...">
+        </div>
+      </div>
+      <div class="row g-3" id="car-list-container">
+        </div>
+    </section>
+
+    <section id="customer-dashboard" class="d-none">
+      <h4 class="fw-bold mb-3"><i class="bi-card-checklist me-2"></i>My Active Rentals & Returns</h4>
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th>Car</th>
+                  <th>Days</th>
+                  <th>Total Paid</th>
+                  <th>Renter Name</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="rented-table-body">
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="admin-dashboard" class="d-none">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0"><i class="bi-speedometer2 me-2"></i>Admin Dashboard</h4>
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addCarModal">
+          <i class="bi-plus-lg me-1"></i> Add New Car
+        </button>
+      </div>
+
+      <div class="row g-2 mb-4">
+        <div class="col-4">
+          <div class="card bg-primary text-white p-2 text-center">
+            <small>Total</small>
+            <h4 id="stat-total-cars" class="mb-0">0</h4>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card bg-warning text-dark p-2 text-center">
+            <small>Rented</small>
+            <h4 id="stat-rented-cars" class="mb-0">0</h4>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card bg-success text-white p-2 text-center">
+            <small>Available</small>
+            <h4 id="stat-available-cars" class="mb-0">0</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white fw-bold"><i class="bi-people-fill me-2"></i>Customer Active Rentals & Info</div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-secondary">
+                <tr>
+                  <th>Customer Name</th>
+                  <th>Customer Email</th>
+                  <th>Phone Number</th>
+                  <th>Rented Vehicle</th>
+                  <th>Duration / Total</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-rentals-table-body">
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white fw-bold">Vehicle Fleet</div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Car</th>
+                  <th>Type</th>
+                  <th>Rate/Day</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-table-body">
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="modal fade" id="authModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="authModalTitle">Account Access</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-pills nav-justified mb-3" id="pills-tab">
+            <li class="nav-item">
+              <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login">Login</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register">Register Customer</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-login">
+              <form id="loginForm">
+                <div class="mb-3">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-control" id="loginEmail" placeholder="admin@gmail.com" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" id="loginPassword" placeholder="enter password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <div class="mt-3 text-muted small bg-light p-2 rounded">
+                  <strong>Admin Credentials:</strong> example join@gmail.com / pw : abc234
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="pills-register">
+              <form id="registerForm">
+                <div class="mb-2">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="regName" required placeholder="John Doe">
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" id="regPhone" required placeholder="012 345 678">
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-control" id="regEmail" required placeholder="john@example.com">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Password</label>
+                  <input type="password" class="form-control" id="regPassword" required placeholder="enter password">
+                </div>
+                <button type="submit" class="btn btn-success w-100">Register Account</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="rentalModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi-calculator me-2"></i>Rent & Payment Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card bg-light mb-3">
+            <div class="card-body">
+              <h5 id="modalCarName" class="fw-bold mb-1">Car Name</h5>
+              <p id="modalCarRate" class="text-muted mb-0">Daily Rate: $0</p>
+            </div>
+          </div>
+          <form id="checkoutForm">
+            <input type="hidden" id="modalCarId">
+            <div class="mb-3">
+              <label class="form-label">Number of Rental Days</label>
+              <input type="number" class="form-control" id="rentalDays" min="1" value="1" oninput="calculateTotal()" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Select Payment Method</label>
+              <select class="form-select" id="paymentMethod" required>
+                <option value="ABA Pay / KHQR">ABA Pay / KHQR</option>
+                <option value="Credit Card">Credit Card (Visa/Mastercard)</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
+              </select>
+            </div>
+            <div class="p-3 bg-warning-subtle border border-warning rounded mb-3 text-center">
+              <span class="fs-6">Total Cost:</span>
+              <h3 id="modalTotalCost" class="fw-bold text-success mb-0">$0</h3>
+            </div>
+            <button type="submit" class="btn btn-success w-100 btn-lg">
+              <i class="bi-credit-card-fill me-1"></i> Pay & Rent Now
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addCarModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New Vehicle</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addCarForm">
+            <div class="mb-3">
+              <label class="form-label">Car Name</label>
+              <input type="text" class="form-control" id="carName" required placeholder="e.g. Lexus RX350">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="carType">
+                <option value="SUV">SUV</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Luxury">Luxury</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Price Per Day ($)</label>
+              <input type="number" class="form-control" id="carPrice" required placeholder="50">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Image URL</label>
+              <input type="url" class="form-control" id="carImage" required placeholder="https://...">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Save Vehicle</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // System Users Database (Admin credentials configured here)
+    let users = [
+      { name: "System Admin", phone: "012000000", email: "visal22@gmail.com", password: "Sal22", role: "Admin" }
+    ];
+
+    let currentUser = null;
+
+    // 20 Initial Cars Data
+    let cars = [
+      { id: 1, name: "Toyota Prius 2010", type: "Sedan", price: 30, available: true, img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=600&q=80" },
+      { id: 2, name: "Lexus RX 350", type: "SUV", price: 85, available: true, img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" },
+      { id: 3, name: "Ford Ranger Wildtrak", type: "Pickup", price: 70, available: true, img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80" },
+      { id: 4, name: "Mercedes-Benz C-Class", type: "Luxury", price: 120, available: true, img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=600&q=80" },
+      { id: 5, name: "BMW X5", type: "SUV", price: 110, available: true, img: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=600&q=80" },
+      { id: 6, name: "Audi A6", type: "Sedan", price: 95, available: true, img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80" },
+      { id: 7, name: "Toyota Highlander", type: "SUV", price: 75, available: true, img: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80" },
+      { id: 8, name: "Hyundai Tucson", type: "SUV", price: 50, available: true, img: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=600&q=80" },
+      { id: 9, name: "Honda Civic", type: "Sedan", price: 40, available: true, img: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=600&q=80" },
+      { id: 10, name: "Mazda CX-5", type: "SUV", price: 55, available: true, img: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=600&q=80" },
+      { id: 11, name: "Toyota Land Cruiser", type: "SUV", price: 150, available: true, img: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=600&q=80" },
+      { id: 12, name: "Kia Carnival", type: "SUV", price: 80, available: true, img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" },
+      { id: 13, name: "Chevrolet Colorado", type: "Pickup", price: 60, available: true, img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80" },
+      { id: 14, name: "Porsche Cayenne", type: "Luxury", price: 200, available: true, img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80" },
+      { id: 15, name: "Nissan GT-R", type: "Luxury", price: 250, available: true, img: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80" },
+      { id: 16, name: "Toyota Camry", type: "Sedan", price: 45, available: true, img: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=600&q=80" },
+      { id: 17, name: "Lexus LX 570", type: "Luxury", price: 220, available: true, img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" },
+      { id: 18, name: "Ford Mustang", type: "Luxury", price: 130, available: true, img: "https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=600&q=80" },
+      { id: 19, name: "Mitsubishi Triton", type: "Pickup", price: 55, available: true, img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80" },
+      { id: 20, name: "Hyundai Elantra", type: "Sedan", price: 35, available: true, img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80" }
+    ];
+
+    let rentals = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      refreshAllViews();
+    });
+
+    // Navigation Handler
+    function showSection(sectionId) {
+      document.getElementById('customer-browse').classList.add('d-none');
+      document.getElementById('customer-dashboard').classList.add('d-none');
+      document.getElementById('admin-dashboard').classList.add('d-none');
+
+      document.getElementById(sectionId).classList.remove('d-none');
+    }
+
+    // Login Form Action
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        currentUser = user;
+        updateUserUI();
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('authModal'));
+        modal.hide();
+        this.reset();
+      } else {
+        alert("Invalid Email or Password! Please try again.");
+      }
+    });
+
+    // Customer Registration Action
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const phone = document.getElementById('regPhone').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+
+      const existingUser = users.find(u => u.email === email);
+      if (existingUser) {
+        alert("This Email is already registered!");
+        return;
+      }
+
+      const newUser = { name: name, phone: phone, email: email, password: password, role: 'Customer' };
+      users.push(newUser);
+      currentUser = newUser;
+      
+      updateUserUI();
+      alert(`Account created successfully! Welcome ${name}.`);
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('authModal'));
+      modal.hide();
+      this.reset();
+    });
+
+    // Logout Function
+    function logout() {
+      currentUser = null;
+      updateUserUI();
+      showSection('customer-browse');
+    }
+
+    // UI State Update
+    function updateUserUI() {
+      const userDisplay = document.getElementById('user-display');
+      const authBtn = document.getElementById('auth-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+      const adminNav = document.getElementById('nav-admin');
+
+      if (currentUser) {
+        userDisplay.innerHTML = `<i class="bi-person-circle text-warning"></i> ${currentUser.name} (${currentUser.role})`;
+        authBtn.classList.add('d-none');
+        logoutBtn.classList.remove('d-none');
+
+        if (currentUser.role === 'Admin') {
+          adminNav.classList.remove('d-none');
+          showSection('admin-dashboard');
+        } else {
+          adminNav.classList.add('d-none');
+        }
+      } else {
+        userDisplay.innerHTML = `<i class="bi-person-circle"></i> Guest`;
+        authBtn.classList.remove('d-none');
+        logoutBtn.classList.add('d-none');
+        adminNav.classList.add('d-none');
+      }
+    }
+
+    // Render Car Cards
+    function renderCars(filterText = '') {
+      const container = document.getElementById('car-list-container');
+      container.innerHTML = '';
+
+      const filtered = cars.filter(car => 
+        car.name.toLowerCase().includes(filterText.toLowerCase()) || 
+        car.type.toLowerCase().includes(filterText.toLowerCase())
+      );
+
+      filtered.forEach(car => {
+        const badge = car.available 
+          ? `<span class="badge bg-success">Available</span>` 
+          : `<span class="badge bg-danger">Rented</span>`;
+        
+        const btn = car.available 
+          ? `<button class="btn btn-primary w-100 fw-bold" onclick="openRentalModal(${car.id})"><i class="bi-key me-1"></i> Rent Now</button>` 
+          : `<button class="btn btn-secondary w-100" disabled>Not Available</button>`;
+
+        container.innerHTML += `
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card car-card h-100 shadow-sm border-0">
+              <img src="${car.img}" class="card-img-top" alt="${car.name}">
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="card-title fw-bold mb-0">${car.name}</h6>
+                  ${badge}
+                </div>
+                <p class="text-muted small mb-2">Type: ${car.type}</p>
+                <p class="fw-bold text-primary fs-5 mt-auto mb-3">$${car.price} <span class="fs-6 text-muted fw-normal">/day</span></p>
+                ${btn}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterCars() {
+      const text = document.getElementById('searchInput').value;
+      renderCars(text);
+    }
+
+    // Open Rental Modal
+    function openRentalModal(carId) {
+      if (!currentUser) {
+        alert("Please login or register an account to rent a car.");
+        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+        authModal.show();
+        return;
+      }
+
+      const car = cars.find(c => c.id === carId);
+      if (car) {
+        document.getElementById('modalCarId').value = car.id;
+        document.getElementById('modalCarName').innerText = car.name;
+        document.getElementById('modalCarRate').innerText = `Daily Rate: $${car.price}`;
+        document.getElementById('rentalDays').value = 1;
+        
+        calculateTotal();
+
+        const rentalModal = new bootstrap.Modal(document.getElementById('rentalModal'));
+        rentalModal.show();
+      }
+    }
+
+    function calculateTotal() {
+      const carId = parseInt(document.getElementById('modalCarId').value);
+      const days = parseInt(document.getElementById('rentalDays').value) || 1;
+      const car = cars.find(c => c.id === carId);
+
+      if (car) {
+        const total = car.price * days;
+        document.getElementById('modalTotalCost').innerText = `$${total}`;
+      }
+    }
+
+    // Process Rental
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const carId = parseInt(document.getElementById('modalCarId').value);
+      const days = parseInt(document.getElementById('rentalDays').value);
+      const paymentMethod = document.getElementById('paymentMethod').value;
+      const car = cars.find(c => c.id === carId);
+
+      if (car && car.available) {
+        car.available = false;
+        const totalCost = car.price * days;
+
+        rentals.push({
+          id: Date.now(),
+          carId: car.id,
+          carName: car.name,
+          renterName: currentUser.name,
+          renterEmail: currentUser.email,
+          renterPhone: currentUser.phone || 'N/A',
+          days: days,
+          totalPrice: totalCost,
+          paymentMethod: paymentMethod,
+          status: "Active"
+        });
+
+        refreshAllViews();
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('rentalModal'));
+        modal.hide();
+
+        alert(`Payment Successful! You rented ${car.name} for ${days} day(s). Total: $${totalCost} via ${paymentMethod}.`);
+        showSection('customer-dashboard');
+      }
+    });
+
+    // Return Car Function
+    function returnCar(rentalId) {
+      const rentalIndex = rentals.findIndex(r => r.id === rentalId);
+      if (rentalIndex !== -1) {
+        const rental = rentals[rentalIndex];
+        
+        const car = cars.find(c => c.id === rental.carId);
+        if (car) car.available = true;
+
+        rentals.splice(rentalIndex, 1);
+        refreshAllViews();
+
+        alert(`Vehicle "${rental.carName}" successfully returned!`);
+      }
+    }
+
+    // Render Customer Rented Table
+    function renderCustomerRentals() {
+      const tbody = document.getElementById('rented-table-body');
+      tbody.innerHTML = '';
+
+      if (!currentUser) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-3">Please login to view your rentals.</td></tr>`;
+        return;
+      }
+
+      const userRentals = rentals.filter(r => r.renterEmail === currentUser.email);
+
+      if (userRentals.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-3">No active rentals found.</td></tr>`;
+        return;
+      }
+
+      userRentals.forEach((r) => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold">${r.carName}</td>
+            <td>${r.days} Days</td>
+            <td class="text-success fw-bold">$${r.totalPrice}</td>
+            <td>${r.renterName}</td>
+            <td><span class="badge bg-warning text-dark">${r.status}</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" onclick="returnCar(${r.id})">
+                <i class="bi-arrow-return-left"></i> Return Car
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // Render Admin Fleet & Active Customer Rentals
+    function renderAdminTable() {
+      // Fleet Inventory Table
+      const tbody = document.getElementById('admin-table-body');
+      tbody.innerHTML = '';
+
+      cars.forEach(car => {
+        const statusBadge = car.available 
+          ? `<span class="badge bg-success">Available</span>` 
+          : `<span class="badge bg-danger">Rented</span>`;
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${car.id}</td>
+            <td class="fw-bold">${car.name}</td>
+            <td>${car.type}</td>
+            <td>$${car.price}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" onclick="deleteCar(${car.id})">
+                <i class="bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      // Customer Rentals Overview for Admin
+      const rentalsTbody = document.getElementById('admin-rentals-table-body');
+      rentalsTbody.innerHTML = '';
+
+      if (rentals.length === 0) {
+        rentalsTbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted p-3">No active customer rentals.</td></tr>`;
+        return;
+      }
+
+      rentals.forEach(r => {
+        rentalsTbody.innerHTML += `
+          <tr>
+            <td class="fw-bold">${r.renterName}</td>
+            <td><a href="mailto:${r.renterEmail}">${r.renterEmail}</a></td>
+            <td>${r.renterPhone}</td>
+            <td class="fw-bold text-primary">${r.carName}</td>
+            <td>${r.days} Days ($${r.totalPrice})</td>
+            <td>
+              <button class="btn btn-sm btn-danger" onclick="returnCar(${r.id})">
+                Force Return
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function deleteCar(carId) {
+      if (confirm('Are you sure you want to delete this vehicle?')) {
+        cars = cars.filter(c => c.id !== carId);
+        refreshAllViews();
+      }
+    }
+
+    // Add Car Action
+    document.getElementById('addCarForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const newCar = {
+        id: cars.length ? Math.max(...cars.map(c => c.id)) + 1 : 1,
+        name: document.getElementById('carName').value,
+        type: document.getElementById('carType').value,
+        price: parseFloat(document.getElementById('carPrice').value),
+        available: true,
+        img: document.getElementById('carImage').value || 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80'
+      };
+
+      cars.push(newCar);
+      refreshAllViews();
+
+      this.reset();
+      const modal = bootstrap.Modal.getInstance(document.getElementById('addCarModal'));
+      modal.hide();
+    });
+
+    // Update Stats
+    function updateStats() {
+      const total = cars.length;
+      const rented = cars.filter(c => !c.available).length;
+      const available = total - rented;
+
+      document.getElementById('stat-total-cars').innerText = total;
+      document.getElementById('stat-rented-cars').innerText = rented;
+      document.getElementById('stat-available-cars').innerText = available;
+    }
+
+    function refreshAllViews() {
+      renderCars();
+      renderCustomerRentals();
+      renderAdminTable();
+      updateStats();
+    }
+  </script>
+</body>
+</html>
