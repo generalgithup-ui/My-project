@@ -1,0 +1,3115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Car Rental System</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #f5f7fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 23px;
+        }
+
+        .hero {
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.65),
+                    rgba(0, 0, 0, 0.65)
+                ),
+                url("https://images.unsplash.com/photo-1503376780353-7e6692767b70")
+                center/cover;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 55px;
+            font-weight: bold;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .car-card {
+            transition: 0.3s;
+            border: none;
+            overflow: hidden;
+        }
+
+        .car-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .car-image {
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .dashboard-card {
+            border: none;
+            border-radius: 15px;
+        }
+
+        .dashboard-icon {
+            font-size: 35px;
+        }
+
+        .auth-card {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .profile-box {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        footer {
+            margin-top: 80px;
+        }
+
+        .status-available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-rented {
+            color: red;
+            font-weight: bold;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+
+    <div class="container">
+
+        <a
+            class="navbar-brand"
+            href="#"
+            onclick="showSection('home')"
+        >
+            🚗 Car Rental System
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMenu"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarMenu"
+        >
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="#"
+                        onclick="showSection('home')"
+                    >
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="#"
+                        onclick="showSection('cars')"
+                    >
+                        Cars
+                    </a>
+                </li>
+
+                <li
+                    class="nav-item"
+                    id="myRentalMenu"
+                    style="display:none;"
+                >
+                    <a
+                        class="nav-link"
+                        href="#"
+                        onclick="showSection('myRentals')"
+                    >
+                        My Rentals
+                    </a>
+                </li>
+
+                <li
+                    class="nav-item"
+                    id="profileMenu"
+                    style="display:none;"
+                >
+                    <a
+                        class="nav-link"
+                        href="#"
+                        onclick="showSection('profile')"
+                    >
+                        Profile
+                    </a>
+                </li>
+
+                <li
+                    class="nav-item"
+                    id="adminMenu"
+                    style="display:none;"
+                >
+                    <a
+                        class="nav-link"
+                        href="#"
+                        onclick="showSection('admin')"
+                    >
+                        Admin
+                    </a>
+                </li>
+
+                <li
+                    class="nav-item"
+                    id="loginMenu"
+                >
+                    <a
+                        class="nav-link"
+                        href="#"
+                        onclick="showSection('login')"
+                    >
+                        Login
+                    </a>
+                </li>
+
+                <li
+                    class="nav-item"
+                    id="registerMenu"
+                >
+                    <a
+                        class="nav-link"
+                        href="#"
+                        onclick="showSection('register')"
+                    >
+                        Register
+                    </a>
+                </li>
+
+                <li
+                    class="nav-item"
+                    id="logoutMenu"
+                    style="display:none;"
+                >
+                    <a
+                        class="nav-link text-danger"
+                        href="#"
+                        onclick="logout()"
+                    >
+                        Logout
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HOME ================= -->
+
+<section
+    id="home"
+    class="section active"
+>
+
+    <div class="hero">
+
+        <div class="container">
+
+            <h1>
+                Rent Your Dream Car
+            </h1>
+
+            <p class="lead">
+                Easy, Fast and Affordable Car Rental Service
+            </p>
+
+            <button
+                class="btn btn-primary btn-lg me-2"
+                onclick="showSection('cars')"
+            >
+                Browse Cars
+            </button>
+
+            <button
+                class="btn btn-outline-light btn-lg"
+                onclick="showSection('register')"
+            >
+                Create Account
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="container py-5">
+
+        <div class="text-center mb-5">
+
+            <h2>
+                Why Choose Our Service?
+            </h2>
+
+            <p class="text-muted">
+                Everything you need for a simple car rental experience
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <div class="card shadow-sm text-center p-4">
+
+                    <div class="display-4">
+                        🚘
+                    </div>
+
+                    <h4>
+                        Many Cars
+                    </h4>
+
+                    <p class="text-muted">
+                        Choose from different cars and prices.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="card shadow-sm text-center p-4">
+
+                    <div class="display-4">
+                        💰
+                    </div>
+
+                    <h4>
+                        Affordable Price
+                    </h4>
+
+                    <p class="text-muted">
+                        Affordable daily rental prices.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="card shadow-sm text-center p-4">
+
+                    <div class="display-4">
+                        ⚡
+                    </div>
+
+                    <h4>
+                        Easy Rental
+                    </h4>
+
+                    <p class="text-muted">
+                        Rent and return your car easily.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CARS ================= -->
+
+<section
+    id="cars"
+    class="section"
+>
+
+    <div class="container py-5">
+
+        <div class="text-center mb-4">
+
+            <h2>
+                Available Cars
+            </h2>
+
+            <p class="text-muted">
+                Find the perfect car for your trip
+            </p>
+
+        </div>
+
+
+        <div class="row mb-4 g-3">
+
+            <div class="col-md-6">
+
+                <input
+                    type="text"
+                    id="searchCar"
+                    class="form-control"
+                    placeholder="Search car..."
+                    onkeyup="displayCars()"
+                >
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <select
+                    id="filterType"
+                    class="form-select"
+                    onchange="displayCars()"
+                >
+
+                    <option value="All">
+                        All Types
+                    </option>
+
+                    <option value="Sedan">
+                        Sedan
+                    </option>
+
+                    <option value="SUV">
+                        SUV
+                    </option>
+
+                    <option value="Pickup">
+                        Pickup
+                    </option>
+
+                    <option value="Luxury">
+                        Luxury
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="row g-4"
+            id="carList"
+        ></div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= LOGIN ================= -->
+
+<section
+    id="login"
+    class="section"
+>
+
+    <div class="container py-5">
+
+        <div class="card shadow p-4 auth-card">
+
+            <h2 class="text-center mb-4">
+                Login
+            </h2>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    class="form-control"
+                    placeholder="Enter your email"
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    class="form-control"
+                    placeholder="Enter your password"
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Login As
+                </label>
+
+                <select
+                    id="loginRole"
+                    class="form-select"
+                >
+
+                    <option value="customer">
+                        Customer
+                    </option>
+
+                    <option value="admin">
+                        Admin
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="btn btn-primary w-100"
+                onclick="login()"
+            >
+                Login
+            </button>
+
+
+            <div class="text-center mt-4">
+
+                <p class="mb-1">
+                    Don't have an account?
+                </p>
+
+                <button
+                    class="btn btn-outline-primary"
+                    onclick="showSection('register')"
+                >
+                    Create Customer Account
+                </button>
+
+            </div>
+
+
+            <hr>
+
+
+            <div class="text-center">
+
+                <small class="text-muted">
+                    Admin Login
+                </small>
+
+                <br>
+
+                <small>
+                    Email: admin@gmail.com
+                </small>
+
+                <br>
+
+                <small>
+                    Password: admin123
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= REGISTER ================= -->
+
+<section
+    id="register"
+    class="section"
+>
+
+    <div class="container py-5">
+
+        <div class="card shadow p-4 auth-card">
+
+            <h2 class="text-center mb-4">
+                Customer Registration
+            </h2>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="registerName"
+                    class="form-control"
+                    placeholder="Enter your full name"
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    class="form-control"
+                    placeholder="Enter your email"
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Phone
+                </label>
+
+                <input
+                    type="text"
+                    id="registerPhone"
+                    class="form-control"
+                    placeholder="Enter phone number"
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    class="form-control"
+                    placeholder="Create password"
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="registerConfirmPassword"
+                    class="form-control"
+                    placeholder="Confirm password"
+                >
+
+            </div>
+
+
+            <button
+                class="btn btn-success w-100"
+                onclick="registerCustomer()"
+            >
+                Create Account
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= RENTAL ================= -->
+
+<section
+    id="rental"
+    class="section"
+>
+
+    <div class="container py-5">
+
+        <div class="card shadow p-4 auth-card">
+
+            <h2 class="mb-4">
+                Rent Car
+            </h2>
+
+
+            <div id="selectedCarInfo"></div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Rental Date
+                </label>
+
+                <input
+                    type="date"
+                    id="rentalDate"
+                    class="form-control"
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Return Date
+                </label>
+
+                <input
+                    type="date"
+                    id="returnDate"
+                    class="form-control"
+                >
+
+            </div>
+
+
+            <div class="alert alert-info">
+
+                <strong>
+                    Note:
+                </strong>
+
+                Rental price is calculated per day.
+
+            </div>
+
+
+            <button
+                class="btn btn-success w-100"
+                onclick="confirmRental()"
+            >
+                Confirm Rental
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= MY RENTALS ================= -->
+
+<section
+    id="myRentals"
+    class="section"
+>
+
+    <div class="container py-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h2>
+                My Rentals
+            </h2>
+
+            <button
+                class="btn btn-primary"
+                onclick="showSection('cars')"
+            >
+                Rent Another Car
+            </button>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover bg-white">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Car</th>
+
+                        <th>Rental Date</th>
+
+                        <th>Return Date</th>
+
+                        <th>Days</th>
+
+                        <th>Rental</th>
+
+                        <th>Late Fee</th>
+
+                        <th>Total</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="rentalTable"
+                ></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PROFILE ================= -->
+
+<section
+    id="profile"
+    class="section"
+>
+
+    <div class="container py-5">
+
+        <div class="profile-box shadow">
+
+            <h2 class="mb-4">
+                My Profile
+            </h2>
+
+            <div id="profileInfo"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ADMIN ================= -->
+
+<section
+    id="admin"
+    class="section"
+>
+
+    <div class="container py-5">
+
+        <div class="d-flex justify-content-between mb-4">
+
+            <h2>
+                Admin Dashboard
+            </h2>
+
+            <span
+                class="badge bg-dark p-2"
+            >
+                Administrator
+            </span>
+
+        </div>
+
+
+        <!-- DASHBOARD CARDS -->
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card shadow p-4 text-center">
+
+                    <div class="dashboard-icon">
+                        🚗
+                    </div>
+
+                    <h6>
+                        Total Cars
+                    </h6>
+
+                    <h2 id="totalCars">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card shadow p-4 text-center">
+
+                    <div class="dashboard-icon">
+                        ✅
+                    </div>
+
+                    <h6>
+                        Available
+                    </h6>
+
+                    <h2 id="availableCars">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card shadow p-4 text-center">
+
+                    <div class="dashboard-icon">
+                        🔑
+                    </div>
+
+                    <h6>
+                        Rented
+                    </h6>
+
+                    <h2 id="rentedCars">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3">
+
+                <div class="card dashboard-card shadow p-4 text-center">
+
+                    <div class="dashboard-icon">
+                        👥
+                    </div>
+
+                    <h6>
+                        Customers
+                    </h6>
+
+                    <h2 id="totalCustomers">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD CAR -->
+
+        <div class="card shadow p-4 mb-5">
+
+            <h4 class="mb-4">
+                Add New Car
+            </h4>
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+
+                    <input
+                        type="text"
+                        id="carName"
+                        class="form-control"
+                        placeholder="Car Name"
+                    >
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <select
+                        id="carType"
+                        class="form-select"
+                    >
+
+                        <option value="Sedan">
+                            Sedan
+                        </option>
+
+                        <option value="SUV">
+                            SUV
+                        </option>
+
+                        <option value="Pickup">
+                            Pickup
+                        </option>
+
+                        <option value="Luxury">
+                            Luxury
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <input
+                        type="number"
+                        id="carPrice"
+                        class="form-control"
+                        placeholder="Price / Day"
+                    >
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <input
+                        type="text"
+                        id="carImage"
+                        class="form-control"
+                        placeholder="Image URL"
+                    >
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <button
+                        class="btn btn-success w-100"
+                        onclick="addCar()"
+                    >
+                        Add Car
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CAR MANAGEMENT -->
+
+        <div class="card shadow p-4 mb-5">
+
+            <h4 class="mb-4">
+                Manage Cars
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Car</th>
+
+                            <th>Type</th>
+
+                            <th>Price</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="adminCarTable"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMERS -->
+
+        <div class="card shadow p-4 mb-5">
+
+            <h4 class="mb-4">
+                Customer Management
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Name</th>
+
+                            <th>Email</th>
+
+                            <th>Phone</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="customerTable"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- RENTALS -->
+
+        <div class="card shadow p-4">
+
+            <h4 class="mb-4">
+                Rental Management
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Customer</th>
+
+                            <th>Car</th>
+
+                            <th>Rental Date</th>
+
+                            <th>Return Date</th>
+
+                            <th>Total</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="adminRentalTable"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="bg-dark text-white text-center p-4">
+
+    <p class="mb-0">
+        © 2026 Car Rental System
+    </p>
+
+</footer>
+
+
+<script>
+
+/* ================= DEFAULT CARS ================= */
+
+let cars =
+JSON.parse(localStorage.getItem("cars")) || [
+
+    {
+        id: 1,
+        name: "Toyota Camry",
+        type: "Sedan",
+        price: 45,
+        image: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb"
+    },
+
+    {
+        id: 2,
+        name: "Honda Civic",
+        type: "Sedan",
+        price: 40,
+        image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d"
+    },
+
+    {
+        id: 3,
+        name: "Toyota RAV4",
+        type: "SUV",
+        price: 55,
+        image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b"
+    },
+
+    {
+        id: 4,
+        name: "Ford Ranger",
+        type: "Pickup",
+        price: 60,
+        image: "https://images.unsplash.com/photo-1592838064575-70ed626d3a0e"
+    },
+
+    {
+        id: 5,
+        name: "Toyota Fortuner",
+        type: "SUV",
+        price: 65,
+        image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6"
+    },
+
+    {
+        id: 6,
+        name: "Mercedes C-Class",
+        type: "Luxury",
+        price: 100,
+        image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8"
+    }
+
+];
+
+
+/* ================= CUSTOMERS ================= */
+
+let customers =
+JSON.parse(localStorage.getItem("customers")) || [];
+
+
+/* ================= RENTALS ================= */
+
+let rentals =
+JSON.parse(localStorage.getItem("rentals")) || [];
+
+
+/* ================= CURRENT USER ================= */
+
+let currentUser =
+JSON.parse(localStorage.getItem("currentUser")) || null;
+
+
+/* ================= SELECTED CAR ================= */
+
+let selectedCar = null;
+
+
+/* ================= ADMIN ACCOUNT ================= */
+
+const ADMIN_EMAIL =
+"admin@gmail.com";
+
+const ADMIN_PASSWORD =
+"admin123";
+
+
+/* ================= SAVE FUNCTIONS ================= */
+
+function saveCars() {
+
+    localStorage.setItem(
+        "cars",
+        JSON.stringify(cars)
+    );
+
+}
+
+
+function saveCustomers() {
+
+    localStorage.setItem(
+        "customers",
+        JSON.stringify(customers)
+    );
+
+}
+
+
+function saveRentals() {
+
+    localStorage.setItem(
+        "rentals",
+        JSON.stringify(rentals)
+    );
+
+}
+
+
+/* ================= SHOW SECTION ================= */
+
+function showSection(sectionId) {
+
+    document
+        .querySelectorAll(".section")
+        .forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+
+    const section =
+        document.getElementById(sectionId);
+
+
+    if (section) {
+
+        section.classList.add("active");
+
+    }
+
+
+    if (sectionId === "cars") {
+
+        displayCars();
+
+    }
+
+
+    if (sectionId === "myRentals") {
+
+        displayMyRentals();
+
+    }
+
+
+    if (sectionId === "profile") {
+
+        displayProfile();
+
+    }
+
+
+    if (sectionId === "admin") {
+
+        displayAdmin();
+
+    }
+
+
+    window.scrollTo(0, 0);
+
+}
+
+
+/* ================= REGISTER ================= */
+
+function registerCustomer() {
+
+    const name =
+        document
+        .getElementById("registerName")
+        .value.trim();
+
+
+    const email =
+        document
+        .getElementById("registerEmail")
+        .value.trim()
+        .toLowerCase();
+
+
+    const phone =
+        document
+        .getElementById("registerPhone")
+        .value.trim();
+
+
+    const password =
+        document
+        .getElementById("registerPassword")
+        .value;
+
+
+    const confirmPassword =
+        document
+        .getElementById("registerConfirmPassword")
+        .value;
+
+
+    if (
+        !name ||
+        !email ||
+        !phone ||
+        !password ||
+        !confirmPassword
+    ) {
+
+        alert(
+            "Please fill in all fields."
+        );
+
+        return;
+
+    }
+
+
+    if (password !== confirmPassword) {
+
+        alert(
+            "Passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    if (password.length < 4) {
+
+        alert(
+            "Password must be at least 4 characters."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        email === ADMIN_EMAIL
+    ) {
+
+        alert(
+            "This email is reserved for Admin."
+        );
+
+        return;
+
+    }
+
+
+    const existingCustomer =
+        customers.find(
+            customer =>
+            customer.email === email
+        );
+
+
+    if (existingCustomer) {
+
+        alert(
+            "This email is already registered."
+        );
+
+        return;
+
+    }
+
+
+    const customer = {
+
+        id: Date.now(),
+
+        name: name,
+
+        email: email,
+
+        phone: phone,
+
+        password: password
+
+    };
+
+
+    customers.push(customer);
+
+    saveCustomers();
+
+
+    alert(
+        "Account created successfully!"
+    );
+
+
+    document
+        .getElementById("registerName")
+        .value = "";
+
+    document
+        .getElementById("registerEmail")
+        .value = "";
+
+    document
+        .getElementById("registerPhone")
+        .value = "";
+
+    document
+        .getElementById("registerPassword")
+        .value = "";
+
+    document
+        .getElementById("registerConfirmPassword")
+        .value = "";
+
+
+    showSection("login");
+
+}
+
+
+/* ================= LOGIN ================= */
+
+function login() {
+
+    const email =
+        document
+        .getElementById("loginEmail")
+        .value.trim()
+        .toLowerCase();
+
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
+
+
+    const role =
+        document
+        .getElementById("loginRole")
+        .value;
+
+
+    if (!email || !password) {
+
+        alert(
+            "Please enter email and password."
+        );
+
+        return;
+
+    }
+
+
+    /* ADMIN LOGIN */
+
+    if (role === "admin") {
+
+        if (
+            email === ADMIN_EMAIL &&
+            password === ADMIN_PASSWORD
+        ) {
+
+            currentUser = {
+
+                role: "admin",
+
+                email: ADMIN_EMAIL,
+
+                name: "Administrator"
+
+            };
+
+
+            localStorage.setItem(
+                "currentUser",
+                JSON.stringify(currentUser)
+            );
+
+
+            alert(
+                "Admin login successful!"
+            );
+
+
+            updateNavbar();
+
+            showSection("admin");
+
+            return;
+
+        }
+
+
+        alert(
+            "Invalid Admin email or password."
+        );
+
+        return;
+
+    }
+
+
+    /* CUSTOMER LOGIN */
+
+    const customer =
+        customers.find(
+            user =>
+            user.email === email &&
+            user.password === password
+        );
+
+
+    if (!customer) {
+
+        alert(
+            "Invalid Customer email or password."
+        );
+
+        return;
+
+    }
+
+
+    currentUser = {
+
+        role: "customer",
+
+        id: customer.id,
+
+        name: customer.name,
+
+        email: customer.email,
+
+        phone: customer.phone
+
+    };
+
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify(currentUser)
+    );
+
+
+    alert(
+        "Customer login successful!"
+    );
+
+
+    updateNavbar();
+
+    showSection("cars");
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+    currentUser = null;
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+
+    updateNavbar();
+
+    alert(
+        "You have been logged out."
+    );
+
+
+    showSection("home");
+
+}
+
+
+/* ================= NAVBAR ================= */
+
+function updateNavbar() {
+
+    document
+        .getElementById("loginMenu")
+        .style.display =
+        currentUser
+        ? "none"
+        : "block";
+
+
+    document
+        .getElementById("registerMenu")
+        .style.display =
+        currentUser
+        ? "none"
+        : "block";
+
+
+    document
+        .getElementById("logoutMenu")
+        .style.display =
+        currentUser
+        ? "block"
+        : "none";
+
+
+    document
+        .getElementById("myRentalMenu")
+        .style.display =
+        currentUser &&
+        currentUser.role === "customer"
+        ? "block"
+        : "none";
+
+
+    document
+        .getElementById("profileMenu")
+        .style.display =
+        currentUser &&
+        currentUser.role === "customer"
+        ? "block"
+        : "none";
+
+
+    document
+        .getElementById("adminMenu")
+        .style.display =
+        currentUser &&
+        currentUser.role === "admin"
+        ? "block"
+        : "none";
+
+}
+
+
+/* ================= DISPLAY CARS ================= */
+
+function displayCars() {
+
+    const search =
+        document
+        .getElementById("searchCar")
+        ?.value
+        .toLowerCase() || "";
+
+
+    const type =
+        document
+        .getElementById("filterType")
+        ?.value || "All";
+
+
+    const rentedCarIds =
+        rentals
+
+        .filter(
+            rental =>
+            rental.status === "Rented"
+        )
+
+        .map(
+            rental =>
+            rental.carId
+        );
+
+
+    const carList =
+        document.getElementById(
+            "carList"
+        );
+
+
+    carList.innerHTML = "";
+
+
+    cars
+
+        .filter(car =>
+            car.name
+            .toLowerCase()
+            .includes(search)
+        )
+
+        .filter(car =>
+            type === "All" ||
+            car.type === type
+        )
+
+        .forEach(car => {
+
+            const isRented =
+                rentedCarIds.includes(
+                    car.id
+                );
+
+
+            carList.innerHTML += `
+
+                <div class="col-md-4">
+
+                    <div class="card car-card shadow-sm h-100">
+
+                        <img
+                            src="${car.image}?auto=format&fit=crop&w=900&q=80"
+                            class="card-img-top car-image"
+                        >
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                ${car.name}
+                            </h5>
+
+                            <p class="text-muted mb-2">
+                                Type: ${car.type}
+                            </p>
+
+                            <h4 class="text-primary">
+                                $${car.price}
+                                <small class="text-muted">
+                                    / day
+                                </small>
+                            </h4>
+
+                            <p>
+
+                                <span class="badge ${
+                                    isRented
+                                    ? "bg-danger"
+                                    : "bg-success"
+                                }">
+
+                                    ${
+                                        isRented
+                                        ? "Rented"
+                                        : "Available"
+                                    }
+
+                                </span>
+
+                            </p>
+
+                            <button
+                                class="btn ${
+                                    isRented
+                                    ? "btn-secondary"
+                                    : "btn-primary"
+                                } w-100"
+
+                                ${
+                                    isRented
+                                    ? "disabled"
+                                    : `onclick="rentCar(${car.id})"`
+                                }
+                            >
+
+                                ${
+                                    isRented
+                                    ? "Not Available"
+                                    : "Rent Now"
+                                }
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+}
+
+
+/* ================= RENT CAR ================= */
+
+function rentCar(carId) {
+
+    if (
+        !currentUser ||
+        currentUser.role !== "customer"
+    ) {
+
+        alert(
+            "Please login as Customer first."
+        );
+
+        showSection("login");
+
+        return;
+
+    }
+
+
+    selectedCar =
+        cars.find(
+            car => car.id === carId
+        );
+
+
+    if (!selectedCar) {
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "selectedCarInfo"
+        )
+        .innerHTML = `
+
+        <div class="alert alert-primary">
+
+            <h5>
+                ${selectedCar.name}
+            </h5>
+
+            <p class="mb-0">
+                Type: ${selectedCar.type}
+            </p>
+
+            <p class="mb-0">
+                Price: $${selectedCar.price} / day
+            </p>
+
+        </div>
+
+    `;
+
+
+    showSection("rental");
+
+}
+
+
+/* ================= CONFIRM RENTAL ================= */
+
+function confirmRental() {
+
+    if (!selectedCar) {
+
+        return;
+
+    }
+
+
+    const rentalDate =
+        document
+        .getElementById("rentalDate")
+        .value;
+
+
+    const returnDate =
+        document
+        .getElementById("returnDate")
+        .value;
+
+
+    if (!rentalDate || !returnDate) {
+
+        alert(
+            "Please select both dates."
+        );
+
+        return;
+
+    }
+
+
+    const start =
+        new Date(rentalDate);
+
+
+    const end =
+        new Date(returnDate);
+
+
+    if (end <= start) {
+
+        alert(
+            "Return date must be after rental date."
+        );
+
+        return;
+
+    }
+
+
+    const milliseconds =
+        end - start;
+
+
+    const days =
+        Math.ceil(
+            milliseconds /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    const rentalPrice =
+        days * selectedCar.price;
+
+
+    const rental = {
+
+        id: Date.now(),
+
+        customerId:
+            currentUser.id,
+
+        customerName:
+            currentUser.name,
+
+        customerEmail:
+            currentUser.email,
+
+        carId:
+            selectedCar.id,
+
+        carName:
+            selectedCar.name,
+
+        pricePerDay:
+            selectedCar.price,
+
+        rentalDate:
+            rentalDate,
+
+        returnDate:
+            returnDate,
+
+        days:
+            days,
+
+        rentalPrice:
+            rentalPrice,
+
+        lateFee:
+            0,
+
+        total:
+            rentalPrice,
+
+        status:
+            "Rented",
+
+        payment:
+            "Pending"
+
+    };
+
+
+    rentals.push(rental);
+
+    saveRentals();
+
+
+    alert(
+        "Rental successful!\n\n" +
+        "Car: " + selectedCar.name +
+        "\nDays: " + days +
+        "\nTotal: $" + rentalPrice
+    );
+
+
+    selectedCar = null;
+
+
+    showSection("myRentals");
+
+}
+
+
+/* ================= MY RENTALS ================= */
+
+function displayMyRentals() {
+
+    const table =
+        document.getElementById(
+            "rentalTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if (
+        !currentUser ||
+        currentUser.role !== "customer"
+    ) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="10"
+                    class="text-center"
+                >
+                    Please login as Customer.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    const myRentals =
+        rentals.filter(
+            rental =>
+            rental.customerId ===
+            currentUser.id
+        );
+
+
+    if (myRentals.length === 0) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="10"
+                    class="text-center"
+                >
+
+                    You have no rental records.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    myRentals.forEach(rental => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${rental.id}
+                </td>
+
+                <td>
+                    ${rental.carName}
+                </td>
+
+                <td>
+                    ${rental.rentalDate}
+                </td>
+
+                <td>
+                    ${rental.returnDate}
+                </td>
+
+                <td>
+                    ${rental.days}
+                </td>
+
+                <td>
+                    $${rental.rentalPrice}
+                </td>
+
+                <td>
+                    $${rental.lateFee}
+                </td>
+
+                <td>
+                    <strong>
+                        $${rental.total}
+                    </strong>
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        rental.status === "Rented"
+                        ? "bg-warning text-dark"
+                        : "bg-success"
+                    }">
+
+                        ${rental.status}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    ${
+                        rental.status === "Rented"
+
+                        ?
+
+                        `
+
+                        <button
+                            class="btn btn-sm btn-danger mb-1"
+                            onclick="returnCar(${rental.id})"
+                        >
+                            Return
+                        </button>
+
+                        <button
+                            class="btn btn-sm btn-success"
+                            onclick="payRental(${rental.id})"
+                        >
+                            Pay
+                        </button>
+
+                        `
+
+                        :
+
+                        `
+
+                        <span class="text-success">
+                            Completed
+                        </span>
+
+                        `
+
+                    }
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* ================= RETURN CAR ================= */
+
+function returnCar(rentalId) {
+
+    const rental =
+        rentals.find(
+            r => r.id === rentalId
+        );
+
+
+    if (!rental) {
+
+        return;
+
+    }
+
+
+    const today =
+        new Date();
+
+
+    const expectedReturn =
+        new Date(
+            rental.returnDate
+        );
+
+
+    let lateFee = 0;
+
+
+    if (today > expectedReturn) {
+
+        const difference =
+            today - expectedReturn;
+
+
+        const lateDays =
+            Math.ceil(
+                difference /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        lateFee =
+            lateDays * 20;
+
+
+        alert(
+            "Late Return!\n" +
+            "Late Days: " +
+            lateDays +
+            "\nLate Fee: $" +
+            lateFee
+        );
+
+    }
+
+
+    rental.lateFee =
+        lateFee;
+
+
+    rental.total =
+        rental.rentalPrice +
+        lateFee;
+
+
+    rental.status =
+        "Returned";
+
+
+    saveRentals();
+
+
+    alert(
+        "Car returned successfully!\n" +
+        "Total: $" +
+        rental.total
+    );
+
+
+    displayMyRentals();
+
+    displayCars();
+
+}
+
+
+/* ================= PAYMENT ================= */
+
+function payRental(rentalId) {
+
+    const rental =
+        rentals.find(
+            r => r.id === rentalId
+        );
+
+
+    if (!rental) {
+
+        return;
+
+    }
+
+
+    if (rental.payment === "Paid") {
+
+        alert(
+            "This rental has already been paid."
+        );
+
+        return;
+
+    }
+
+
+    const confirmPayment =
+        confirm(
+            "Pay $" +
+            rental.total +
+            " for this rental?"
+        );
+
+
+    if (!confirmPayment) {
+
+        return;
+
+    }
+
+
+    rental.payment =
+        "Paid";
+
+
+    saveRentals();
+
+
+    alert(
+        "Payment successful!"
+    );
+
+
+    displayMyRentals();
+
+}
+
+
+/* ================= PROFILE ================= */
+
+function displayProfile() {
+
+    const profile =
+        document.getElementById(
+            "profileInfo"
+        );
+
+
+    if (
+        !currentUser ||
+        currentUser.role !== "customer"
+    ) {
+
+        profile.innerHTML = `
+            <div class="alert alert-warning">
+                Please login as Customer.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    profile.innerHTML = `
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <h5>
+                    Full Name
+                </h5>
+
+                <p>
+                    ${currentUser.name}
+                </p>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <h5>
+                    Email
+                </h5>
+
+                <p>
+                    ${currentUser.email}
+                </p>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <h5>
+                    Phone
+                </h5>
+
+                <p>
+                    ${currentUser.phone}
+                </p>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <h5>
+                    Account Type
+                </h5>
+
+                <p>
+                    Customer
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ================= ADD CAR ================= */
+
+function addCar() {
+
+    if (
+        !currentUser ||
+        currentUser.role !== "admin"
+    ) {
+
+        alert(
+            "Admin access required."
+        );
+
+        return;
+
+    }
+
+
+    const name =
+        document
+        .getElementById("carName")
+        .value.trim();
+
+
+    const type =
+        document
+        .getElementById("carType")
+        .value;
+
+
+    const price =
+        Number(
+            document
+            .getElementById("carPrice")
+            .value
+        );
+
+
+    const image =
+        document
+        .getElementById("carImage")
+        .value.trim();
+
+
+    if (!name || !price) {
+
+        alert(
+            "Please enter car name and price."
+        );
+
+        return;
+
+    }
+
+
+    const newCar = {
+
+        id: Date.now(),
+
+        name: name,
+
+        type: type,
+
+        price: price,
+
+        image:
+            image ||
+            "https://images.unsplash.com/photo-1503376780353-7e6692767b70"
+
+    };
+
+
+    cars.push(newCar);
+
+    saveCars();
+
+
+    document
+        .getElementById("carName")
+        .value = "";
+
+
+    document
+        .getElementById("carPrice")
+        .value = "";
+
+
+    document
+        .getElementById("carImage")
+        .value = "";
+
+
+    alert(
+        "Car added successfully!"
+    );
+
+
+    displayAdmin();
+
+    displayCars();
+
+}
+
+
+/* ================= DELETE CAR ================= */
+
+function deleteCar(carId) {
+
+    const car =
+        cars.find(
+            c => c.id === carId
+        );
+
+
+    if (!car) {
+
+        return;
+
+    }
+
+
+    const used =
+        rentals.some(
+            rental =>
+            rental.carId === carId &&
+            rental.status === "Rented"
+        );
+
+
+    if (used) {
+
+        alert(
+            "This car is currently rented."
+        );
+
+        return;
+
+    }
+
+
+    const confirmDelete =
+        confirm(
+            "Delete " +
+            car.name +
+            "?"
+        );
+
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    cars =
+        cars.filter(
+            car =>
+            car.id !== carId
+        );
+
+
+    saveCars();
+
+
+    displayAdmin();
+
+    displayCars();
+
+}
+
+
+/* ================= EDIT CAR ================= */
+
+function editCar(carId) {
+
+    const car =
+        cars.find(
+            c => c.id === carId
+        );
+
+
+    if (!car) {
+
+        return;
+
+    }
+
+
+    const newName =
+        prompt(
+            "Enter car name:",
+            car.name
+        );
+
+
+    if (!newName) {
+
+        return;
+
+    }
+
+
+    const newPrice =
+        prompt(
+            "Enter price per day:",
+            car.price
+        );
+
+
+    if (!newPrice) {
+
+        return;
+
+    }
+
+
+    car.name =
+        newName;
+
+
+    car.price =
+        Number(newPrice);
+
+
+    saveCars();
+
+
+    displayAdmin();
+
+    displayCars();
+
+}
+
+
+/* ================= ADMIN DASHBOARD ================= */
+
+function displayAdmin() {
+
+    if (
+        !currentUser ||
+        currentUser.role !== "admin"
+    ) {
+
+        alert(
+            "Admin access required."
+        );
+
+        showSection("login");
+
+        return;
+
+    }
+
+
+    const rentedCars =
+        rentals.filter(
+            rental =>
+            rental.status === "Rented"
+        );
+
+
+    document
+        .getElementById("totalCars")
+        .innerText =
+        cars.length;
+
+
+    document
+        .getElementById("availableCars")
+        .innerText =
+        cars.length -
+        rentedCars.length;
+
+
+    document
+        .getElementById("rentedCars")
+        .innerText =
+        rentedCars.length;
+
+
+    document
+        .getElementById("totalCustomers")
+        .innerText =
+        customers.length;
+
+
+    displayAdminCars();
+
+    displayCustomers();
+
+    displayAdminRentals();
+
+}
+
+
+/* ================= ADMIN CAR TABLE ================= */
+
+function displayAdminCars() {
+
+    const table =
+        document.getElementById(
+            "adminCarTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    cars.forEach(car => {
+
+        const rented =
+            rentals.some(
+                rental =>
+                rental.carId === car.id &&
+                rental.status === "Rented"
+            );
+
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${car.id}
+                </td>
+
+                <td>
+                    ${car.name}
+                </td>
+
+                <td>
+                    ${car.type}
+                </td>
+
+                <td>
+                    $${car.price}
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        rented
+                        ? "bg-danger"
+                        : "bg-success"
+                    }">
+
+                        ${
+                            rented
+                            ? "Rented"
+                            : "Available"
+                        }
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-sm btn-warning"
+                        onclick="editCar(${car.id})"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="btn btn-sm btn-danger"
+                        onclick="deleteCar(${car.id})"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* ================= CUSTOMER TABLE ================= */
+
+function displayCustomers() {
+
+    const table =
+        document.getElementById(
+            "customerTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    customers.forEach(customer => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${customer.id}
+                </td>
+
+                <td>
+                    ${customer.name}
+                </td>
+
+                <td>
+                    ${customer.email}
+                </td>
+
+                <td>
+                    ${customer.phone}
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-sm btn-danger"
+                        onclick="deleteCustomer(${customer.id})"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* ================= DELETE CUSTOMER ================= */
+
+function deleteCustomer(customerId) {
+
+    const customer =
+        customers.find(
+            c => c.id === customerId
+        );
+
+
+    if (!customer) {
+
+        return;
+
+    }
+
+
+    const confirmDelete =
+        confirm(
+            "Delete customer " +
+            customer.name +
+            "?"
+        );
+
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    customers =
+        customers.filter(
+            customer =>
+            customer.id !== customerId
+        );
+
+
+    saveCustomers();
+
+
+    displayAdmin();
+
+}
+
+
+/* ================= ADMIN RENTAL TABLE ================= */
+
+function displayAdminRentals() {
+
+    const table =
+        document.getElementById(
+            "adminRentalTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if (rentals.length === 0) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="text-center"
+                >
+                    No rental records.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    rentals.forEach(rental => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${rental.id}
+                </td>
+
+                <td>
+                    ${rental.customerName}
+                    <br>
+                    <small>
+                        ${rental.customerEmail}
+                    </small>
+                </td>
+
+                <td>
+                    ${rental.carName}
+                </td>
+
+                <td>
+                    ${rental.rentalDate}
+                </td>
+
+                <td>
+                    ${rental.returnDate}
+                </td>
+
+                <td>
+                    $${rental.total}
+                    <br>
+
+                    <small class="${
+                        rental.payment === "Paid"
+                        ? "text-success"
+                        : "text-danger"
+                    }">
+
+                        ${rental.payment}
+
+                    </small>
+
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        rental.status === "Rented"
+                        ? "bg-warning text-dark"
+                        : "bg-success"
+                    }">
+
+                        ${rental.status}
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* ================= INITIALIZE ================= */
+
+updateNavbar();
+
+displayCars();
+
+</script>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+</body>
+</html>
