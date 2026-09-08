@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,25 +11,66 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+
     .car-card img {
       height: 180px;
       object-fit: cover;
     }
+
     .hero-banner {
-      background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&w=1200&q=80');
+      background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&w=1200&q=80');
       background-size: cover;
       background-position: center;
       color: white;
       padding: 35px 15px;
       border-radius: 0 0 15px 15px;
     }
+
     @media (max-width: 576px) {
-      .hero-banner { padding: 25px 10px; }
-      .hero-banner h1 { font-size: 1.6rem; }
-      .car-card img { height: 160px; }
+      .hero-banner {
+        padding: 25px 10px;
+      }
+
+      .hero-banner h1 {
+        font-size: 1.6rem;
+      }
+
+      .car-card img {
+        height: 160px;
+      }
     }
+
+    /* hover footer */
+    a {
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
+      transition: color .3s;
+    }
+
+    a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0;
+      height: 2px;
+      background: black;
+      transition: width .3s ease;
+    }
+
+    a:hover {
+      color: black;
+    }
+
+    a:hover::after {
+      width: 100%;
+    }
+
+    /* end hover */
   </style>
 </head>
+
 <body class="bg-light">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -40,18 +82,22 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto my-2 my-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" href="#" onclick="showSection('customer-browse')"><i class="bi-grid me-1"></i> Available Cars</a>
+            <a class="nav-link active" href="#" onclick="showSection('customer-browse')"><i class="bi-grid me-1"></i>
+              Available Cars</a>
           </li>
           <li class="nav-item" id="nav-my-rentals">
-            <a class="nav-link" href="#" onclick="showSection('customer-dashboard')"><i class="bi-journal-check me-1"></i> My Rentals</a>
+            <a class="nav-link" href="#" onclick="showSection('customer-dashboard')"><i
+                class="bi-journal-check me-1"></i> My Rentals</a>
           </li>
           <li class="nav-item d-none" id="nav-admin">
-            <a class="nav-link text-warning" href="#" onclick="showSection('admin-dashboard')"><i class="bi-shield-lock me-1"></i> Admin Panel</a>
+            <a class="nav-link text-warning" href="#" onclick="showSection('admin-dashboard')"><i
+                class="bi-shield-lock me-1"></i> Admin Panel</a>
           </li>
         </ul>
         <div class="d-flex align-items-center gap-2">
           <span class="text-light small" id="user-display"><i class="bi-person-circle"></i> Guest</span>
-          <button class="btn btn-outline-light btn-sm" id="auth-btn" data-bs-toggle="modal" data-bs-target="#authModal">Login / Register</button>
+          <button class="btn btn-outline-light btn-sm" id="auth-btn" data-bs-toggle="modal"
+            data-bs-target="#authModal">Login / Register</button>
           <button class="btn btn-warning btn-sm d-none" id="logout-btn" onclick="logout()">Logout</button>
         </div>
       </div>
@@ -73,11 +119,12 @@
           <h4 class="fw-bold mb-0"><i class="bi-car-front me-2"></i>Choose a Vehicle (20 Available)</h4>
         </div>
         <div class="col-12 col-md-6">
-          <input type="text" class="form-control" id="searchInput" onkeyup="filterCars()" placeholder="Search car name or type...">
+          <input type="text" class="form-control" id="searchInput" onkeyup="filterCars()"
+            placeholder="Search car name or type...">
         </div>
       </div>
       <div class="row g-3" id="car-list-container">
-        </div>
+      </div>
     </section>
 
     <section id="customer-dashboard" class="d-none">
@@ -97,7 +144,7 @@
                 </tr>
               </thead>
               <tbody id="rented-table-body">
-                </tbody>
+              </tbody>
             </table>
           </div>
         </div>
@@ -134,7 +181,8 @@
       </div>
 
       <div class="card shadow-sm border-0 mb-4">
-        <div class="card-header bg-dark text-white fw-bold"><i class="bi-people-fill me-2"></i>Customer Active Rentals & Info</div>
+        <div class="card-header bg-dark text-white fw-bold"><i class="bi-people-fill me-2"></i>Customer Active Rentals &
+          Info</div>
         <div class="card-body p-0">
           <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
@@ -149,7 +197,7 @@
                 </tr>
               </thead>
               <tbody id="admin-rentals-table-body">
-                </tbody>
+              </tbody>
             </table>
           </div>
         </div>
@@ -171,7 +219,7 @@
                 </tr>
               </thead>
               <tbody id="admin-table-body">
-                </tbody>
+              </tbody>
             </table>
           </div>
         </div>
@@ -184,16 +232,18 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="authModalTitle">Account Access</h5>
+          <h5 class="modal-title text-center" id="authModalTitle">Account Access</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <ul class="nav nav-pills nav-justified mb-3" id="pills-tab">
             <li class="nav-item">
-              <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login">Login</button>
+              <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill"
+                data-bs-target="#pills-login">Login</button>
             </li>
             <li class="nav-item">
-              <button class="nav-link" id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register">Register Customer</button>
+              <button class="nav-link" id="pills-register-tab" data-bs-toggle="pill"
+                data-bs-target="#pills-register">Register Customer</button>
             </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
@@ -201,11 +251,11 @@
               <form id="loginForm">
                 <div class="mb-3">
                   <label class="form-label">Email Address</label>
-                  <input type="email" class="form-control" id="loginEmail" placeholder="admin@gmail.com" required>
+                  <input type="email" class="form-control" id="loginEmail" placeholder="Enter Email" required>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Password</label>
-                  <input type="password" class="form-control" id="loginPassword" placeholder="enter password" required>
+                  <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Login</button>
                 <div class="mt-3 text-muted small bg-light p-2 rounded">
@@ -217,19 +267,19 @@
               <form id="registerForm">
                 <div class="mb-2">
                   <label class="form-label">Full Name</label>
-                  <input type="text" class="form-control" id="regName" required placeholder="John Doe">
+                  <input type="text" class="form-control" id="regName" required placeholder="Enter Name">
                 </div>
                 <div class="mb-2">
                   <label class="form-label">Phone Number</label>
-                  <input type="tel" class="form-control" id="regPhone" required placeholder="012 345 678">
+                  <input type="tel" class="form-control" id="regPhone" required placeholder="Enter Phone Number">
                 </div>
                 <div class="mb-2">
                   <label class="form-label">Email Address</label>
-                  <input type="email" class="form-control" id="regEmail" required placeholder="john@example.com">
+                  <input type="email" class="form-control" id="regEmail" required placeholder="Enter Email">
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Password</label>
-                  <input type="password" class="form-control" id="regPassword" required placeholder="enter password">
+                  <input type="password" class="form-control" id="regPassword" required placeholder="Enter password">
                 </div>
                 <button type="submit" class="btn btn-success w-100">Register Account</button>
               </form>
@@ -258,7 +308,8 @@
             <input type="hidden" id="modalCarId">
             <div class="mb-3">
               <label class="form-label">Number of Rental Days</label>
-              <input type="number" class="form-control" id="rentalDays" min="1" value="1" oninput="calculateTotal()" required>
+              <input type="number" class="form-control" id="rentalDays" min="1" value="1" oninput="calculateTotal()"
+                required>
             </div>
             <div class="mb-3">
               <label class="form-label">Select Payment Method</label>
@@ -318,17 +369,86 @@
     </div>
   </div>
 
+  <!-- footer design -->
+  <div class="container">
+    <hr>
+
+    <div class="row py-5">
+
+      <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <h6 class="fw-bold mb-3">Quick Links</h6>
+        <a class="text-dark text-decoration-none" href="#">Home</a><br>
+        <a class="text-dark text-decoration-none" href="#">Cars</a><br>
+        <a class="text-dark text-decoration-none" href="#">About Us</a><br>
+        <a class="text-dark text-decoration-none" href="#">Contact Us</a><br>
+        <a class="text-dark text-decoration-none" href="#">Our Services</a>
+      </div>
+
+      <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <h6 class="fw-bold mb-3">Cars</h6>
+        <a class="text-dark text-decoration-none" href="#">New Cars</a><br>
+        <a class="text-dark text-decoration-none" href="#">Used Cars</a><br>
+        <a class="text-dark text-decoration-none" href="#">Luxury Cars</a><br>
+        <a class="text-dark text-decoration-none" href="#">Sports Cars</a><br>
+        <a class="text-dark text-decoration-none" href="#">Electric Cars</a>
+      </div>
+
+      <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <h6 class="fw-bold mb-3">Support</h6>
+        <a class="text-dark text-decoration-none" href="#">FAQs</a><br>
+        <a class="text-dark text-decoration-none" href="#">Contact Us</a><br>
+        <a class="text-dark text-decoration-none" href="#">Car Financing</a><br>
+        <a class="text-dark text-decoration-none" href="#">Book a Test Drive</a>
+      </div>
+
+      <div class="col-lg-3 col-md-6 col-12 mb-4">
+        <h6 class="fw-bold mb-3">Our Company</h6>
+        <a class="text-dark text-decoration-none" href="#">About Us</a><br>
+        <a class="text-dark text-decoration-none" href="#">
+          Careers <i class="bi bi-arrow-up-right"></i>
+        </a><br>
+        <a class="text-dark text-decoration-none" href="#">Our Showroom</a><br>
+        <a class="text-dark text-decoration-none" href="#">
+          Partners <i class="bi bi-arrow-up-right"></i>
+        </a>
+      </div>
+      <hr class="mt-4">
+
+      <div class="d-flex justify-content-between align-items-center flex-wrap ">
+        <div class="text-secondary">
+          All Rights Reserved © 2026
+          <span class="mx-2">•</span>
+          Terms & Conditions
+          <span class="mx-2">•</span>
+          Privacy Policy
+          <span class="mx-2">•</span>
+          Cookie Policy
+        </div>
+        <div>
+          <img class="me-3" src="image/facebook.f89d8bdc.svg" alt="" style="width: 20px;">
+          <img class="me-3" src="image/instagram.0aaaf7b7.svg" alt="" style="width: 20px;">
+          <img class="me-3" src="image/linkedin.fc1f98ff.svg" alt="" style="width: 20px;">
+          <img class="me-3" src="image/telegram.6b068316.svg" alt="" style="width: 20px;">
+          <img class="me-3" src="image/play.1b3de134.svg" alt="" style="width: 20px;">
+          <img class="me-3" src="image/icon-tiktok.avif" alt="" style="width: 20px;">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end footer -->
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     // System Users Database (Admin credentials configured here)
     let users = [
-      { name: "System Admin", phone: "012000000", email: "visal22@gmail.com", password: "Sal22", role: "Admin" }
+      { name: "System Admin", phone: "012000000", email: "visal22@gmail.com", password: "Sal22", role: "Admin" },
+      { name: "System Admin", phone: "0976370492", email: "cheatjoker177@gmail.com", password: "chhay1", role: "Admin" },
     ];
 
     let currentUser = null;
 
-    // 20 Initial Cars Data
+    // 21 Initial Cars Data
     let cars = [
       { id: 1, name: "Toyota Prius 2010", type: "Sedan", price: 30, available: true, img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=600&q=80" },
       { id: 2, name: "Lexus RX 350", type: "SUV", price: 85, available: true, img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" },
@@ -349,7 +469,8 @@
       { id: 17, name: "Lexus LX 570", type: "Luxury", price: 220, available: true, img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" },
       { id: 18, name: "Ford Mustang", type: "Luxury", price: 130, available: true, img: "https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=600&q=80" },
       { id: 19, name: "Mitsubishi Triton", type: "Pickup", price: 55, available: true, img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80" },
-      { id: 20, name: "Hyundai Elantra", type: "Sedan", price: 35, available: true, img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80" }
+      { id: 20, name: "Hyundai Elantra", type: "Sedan", price: 35, available: true, img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80" },
+      { id: 21, name: "Hyundai Elantra", type: "Sedan", price: 35, available: true, img: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=600&q=80" },
     ];
 
     let rentals = [];
@@ -368,7 +489,7 @@
     }
 
     // Login Form Action
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
@@ -388,7 +509,7 @@
     });
 
     // Customer Registration Action
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
+    document.getElementById('registerForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const name = document.getElementById('regName').value;
       const phone = document.getElementById('regPhone').value;
@@ -404,7 +525,7 @@
       const newUser = { name: name, phone: phone, email: email, password: password, role: 'Customer' };
       users.push(newUser);
       currentUser = newUser;
-      
+
       updateUserUI();
       alert(`Account created successfully! Welcome ${name}.`);
 
@@ -451,18 +572,18 @@
       const container = document.getElementById('car-list-container');
       container.innerHTML = '';
 
-      const filtered = cars.filter(car => 
-        car.name.toLowerCase().includes(filterText.toLowerCase()) || 
+      const filtered = cars.filter(car =>
+        car.name.toLowerCase().includes(filterText.toLowerCase()) ||
         car.type.toLowerCase().includes(filterText.toLowerCase())
       );
 
       filtered.forEach(car => {
-        const badge = car.available 
-          ? `<span class="badge bg-success">Available</span>` 
+        const badge = car.available
+          ? `<span class="badge bg-success">Available</span>`
           : `<span class="badge bg-danger">Rented</span>`;
-        
-        const btn = car.available 
-          ? `<button class="btn btn-primary w-100 fw-bold" onclick="openRentalModal(${car.id})"><i class="bi-key me-1"></i> Rent Now</button>` 
+
+        const btn = car.available
+          ? `<button class="btn btn-primary w-100 fw-bold" onclick="openRentalModal(${car.id})"><i class="bi-key me-1"></i> Rent Now</button>`
           : `<button class="btn btn-secondary w-100" disabled>Not Available</button>`;
 
         container.innerHTML += `
@@ -492,22 +613,23 @@
     // Open Rental Modal
     function openRentalModal(carId) {
       if (!currentUser) {
-        alert("Please login or register an account to rent a car.");
-        const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+        const authModal = new bootstrap.Modal(
+          document.getElementById('authModal')
+        );
         authModal.show();
         return;
       }
-
       const car = cars.find(c => c.id === carId);
       if (car) {
         document.getElementById('modalCarId').value = car.id;
         document.getElementById('modalCarName').innerText = car.name;
         document.getElementById('modalCarRate').innerText = `Daily Rate: $${car.price}`;
         document.getElementById('rentalDays').value = 1;
-        
         calculateTotal();
+        const rentalModal = new bootstrap.Modal(
+          document.getElementById('rentalModal')
+        );
 
-        const rentalModal = new bootstrap.Modal(document.getElementById('rentalModal'));
         rentalModal.show();
       }
     }
@@ -524,7 +646,7 @@
     }
 
     // Process Rental
-    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    document.getElementById('checkoutForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
       const carId = parseInt(document.getElementById('modalCarId').value);
@@ -564,7 +686,7 @@
       const rentalIndex = rentals.findIndex(r => r.id === rentalId);
       if (rentalIndex !== -1) {
         const rental = rentals[rentalIndex];
-        
+
         const car = cars.find(c => c.id === rental.carId);
         if (car) car.available = true;
 
@@ -617,8 +739,8 @@
       tbody.innerHTML = '';
 
       cars.forEach(car => {
-        const statusBadge = car.available 
-          ? `<span class="badge bg-success">Available</span>` 
+        const statusBadge = car.available
+          ? `<span class="badge bg-success">Available</span>`
           : `<span class="badge bg-danger">Rented</span>`;
 
         tbody.innerHTML += `
@@ -672,9 +794,9 @@
     }
 
     // Add Car Action
-    document.getElementById('addCarForm').addEventListener('submit', function(e) {
+    document.getElementById('addCarForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const newCar = {
         id: cars.length ? Math.max(...cars.map(c => c.id)) + 1 : 1,
         name: document.getElementById('carName').value,
@@ -711,4 +833,5 @@
     }
   </script>
 </body>
+
 </html>
