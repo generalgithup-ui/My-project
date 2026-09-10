@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,116 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
   <link rel="stylesheet" href="/css//style.css">
 </head>
+
 <body class="bg-light">
+<!-- Car Detail Modal -->
+<div class="modal fade" id="carDetailModal" tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="detailCarName">
+                    Car Details
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row g-4">
+
+                    <!-- Car Image -->
+                    <div class="col-md-6">
+
+                        <img id="detailCarImage"
+                             src=""
+                             class="img-fluid w-100 car-detail-image"
+                             alt="Car">
+
+                    </div>
+
+
+                    <!-- Car Information -->
+                    <div class="col-md-6">
+
+                        <h3 id="detailCarTitle"
+                            class="fw-bold mb-3">
+                        </h3>
+
+
+                        <p>
+                            <strong>Brand:</strong>
+                            <span id="detailCarBrand"></span>
+                        </p>
+
+                        <p>
+                            <strong>Type:</strong>
+                            <span id="detailCarType"></span>
+                        </p>
+
+                        <p>
+                            <strong>Year:</strong>
+                            <span id="detailCarYear"></span>
+                        </p>
+
+                        <p>
+                            <strong>Seats:</strong>
+                            <span id="detailCarSeats"></span>
+                        </p>
+
+                        <p>
+                            <strong>Transmission:</strong>
+                            <span id="detailCarTransmission"></span>
+                        </p>
+
+                        <p>
+                            <strong>Fuel:</strong>
+                            <span id="detailCarFuel"></span>
+                        </p>
+
+
+                        <hr>
+
+
+                        <h3 class="text-primary fw-bold">
+                            $<span id="detailCarPrice"></span>
+                            <small class="text-muted fs-6">
+                                /day
+                            </small>
+                        </h3>
+
+
+                        <p id="detailCarDescription"
+                           class="text-muted">
+                        </p>
+
+
+                        <button id="detailRentBtn"
+                                class="btn btn-primary w-100 fw-bold">
+                            <i class="bi-key me-1"></i>
+                            Rent Now
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container">
       <a class="navbar-brand fw-bold" href="#"><i class="bi-car-front-fill me-2 text-warning"></i>DriveEasy</a>
@@ -164,61 +274,92 @@
 
   </div>
 
+  <!-- Login / Register Modal -->
   <div class="modal fade" id="authModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-center" id="authModalTitle">Account Access</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
+      <div class="modal-content auth-modal">
         <div class="modal-body">
-          <ul class="nav nav-pills nav-justified mb-3" id="pills-tab">
-            <li class="nav-item">
-              <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill"
-                data-bs-target="#pills-login">Login</button>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link" id="pills-register-tab" data-bs-toggle="pill"
-                data-bs-target="#pills-register">Register Customer</button>
-            </li>
-          </ul>
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-login">
-              <form id="loginForm">
-                <div class="mb-3">
-                  <label class="form-label">Email Address</label>
-                  <input type="email" class="form-control" id="loginEmail" placeholder="Enter Email" required>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Password</label>
-                  <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-                <div class="mt-3 text-muted small bg-light p-2 rounded">
-                  <strong>Admin Credentials:</strong> example join@gmail.com / pw : abc234
-                </div>
-              </form>
+          <div class="auth-header text-center">
+            <div class="auth-logo">
+              🚗 DriveEasy
             </div>
-            <div class="tab-pane fade" id="pills-register">
-              <form id="registerForm">
-                <div class="mb-2">
-                  <label class="form-label">Full Name</label>
-                  <input type="text" class="form-control" id="regName" required placeholder="Enter Name">
+            <h4 id="authModalTitle">Welcome back!</h4>
+          </div>
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" id="loginTab" onclick="showAuthForm('login')">
+              Login
+            </button>
+            <button type="button" class="auth-tab" id="registerTab" onclick="showAuthForm('register')">
+              Register
+            </button>
+          </div>
+
+          <div id="loginFormContainer">
+            <form id="loginForm">
+              <div class="auth-input">
+                <label>Email</label>
+                <input type="email" id="loginEmail" placeholder="Enter your email" required>
+              </div>
+              <div class="auth-input">
+                <label>Password</label>
+                <div class="password-box">
+                  <input type="password" id="loginPassword" placeholder="Enter password" required>
+                  <button type="button" onclick="togglePassword('loginPassword', this)">
+                    <i class="bi bi-eye"></i>
+                  </button>
                 </div>
-                <div class="mb-2">
-                  <label class="form-label">Phone Number</label>
-                  <input type="tel" class="form-control" id="regPhone" required placeholder="Enter Phone Number">
+              </div>
+              <button type="submit" class="auth-submit">
+                Login
+              </button>
+            </form>
+            <div class="auth-bottom">
+              Don't have an account?
+              <button type="button" onclick="showAuthForm('register')">
+                Register
+              </button>
+            </div>
+          </div>
+          <!-- REGISTER -->
+          <div id="registerFormContainer" class="d-none">
+
+            <form id="registerForm">
+
+              <div class="auth-input">
+                <label>Full Name</label>
+                <input type="text" id="regName" placeholder="Enter your name" required>
+              </div>
+
+              <div class="auth-input">
+                <label>Phone Number</label>
+                <input type="tel" id="regPhone" placeholder="Enter phone number" required>
+              </div>
+
+              <div class="auth-input">
+                <label>Email</label>
+                <input type="email" id="regEmail" placeholder="Enter your email" required>
+              </div>
+
+              <div class="auth-input">
+                <label>Password</label>
+
+                <div class="password-box">
+                  <input type="password" id="regPassword" placeholder="Enter password" required>
+
+                  <button type="button" onclick="togglePassword('regPassword', this)">
+                    <i class="bi bi-eye"></i>
+                  </button>
                 </div>
-                <div class="mb-2">
-                  <label class="form-label">Email Address</label>
-                  <input type="email" class="form-control" id="regEmail" required placeholder="Enter Email">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Password</label>
-                  <input type="password" class="form-control" id="regPassword" required placeholder="Enter password">
-                </div>
-                <button type="submit" class="btn btn-success w-100">Register Account</button>
-              </form>
+              </div>
+              <button type="submit" class="auth-submit ">
+                Register Account
+              </button>
+            </form>
+            <div class="auth-bottom">
+              Already have an account?
+              <button type="button" onclick="showAuthForm('login')">
+                Login
+              </button>
             </div>
           </div>
         </div>
@@ -372,12 +513,12 @@
     </div>
   </div>
   <!-- end footer -->
+</body>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/database.js"></script>
+  <script src="/js/data.js"></script>
   <script src="/js/admin.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/auth.js"></script>
   <script src="/js/car.js"></script>
   <script src="/js/rental.js"></script>
-</body>
 </html>

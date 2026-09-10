@@ -76,3 +76,54 @@ function updateUserUI() {
         adminNav.classList.add('d-none');
     }
 }
+
+function showAuthForm(type) {
+
+    const loginContainer =
+        document.getElementById('loginFormContainer');
+
+    const registerContainer =
+        document.getElementById('registerFormContainer');
+    const loginTab =
+        document.getElementById('loginTab');
+    const registerTab =
+        document.getElementById('registerTab');
+    const title =
+        document.getElementById('authModalTitle');
+    if (type === 'login') {
+        loginContainer.classList.remove('d-none');
+        registerContainer.classList.add('d-none');
+
+        loginTab.classList.add('active');
+        registerTab.classList.remove('active');
+
+        title.textContent = 'Welcome back!';
+
+    } else {
+
+        loginContainer.classList.add('d-none');
+        registerContainer.classList.remove('d-none');
+
+        loginTab.classList.remove('active');
+        registerTab.classList.add('active');
+
+        title.textContent = 'Create your account';
+    }
+}
+// ==============================
+// Show / Hide Password
+// ==============================
+function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+    const icon = button.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+
+    } else {
+        input.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+    }
+}
