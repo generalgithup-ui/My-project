@@ -31,8 +31,8 @@ function renderCars(filterText = '') {
               `;
 
         container.innerHTML += `
-            <div class="col-12 col-sm-6 col-lg-4">
-
+            <div class="col-12 col-sm-6 col-lg-4" data-aos="fade-up">
+        
                 <div class="card car-card h-100 shadow-sm border-0"
                      onclick="showCarDetail(${car.id})"
                      style="cursor: pointer;">
@@ -162,3 +162,4 @@ function showCarDetail(carId) {
 
     modal.show();
 }
+

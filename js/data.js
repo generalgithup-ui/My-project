@@ -8,7 +8,7 @@ let currentUser = null;
 
 // 21 Initial Cars Data
 let cars = [
-    { id: 1, name: "Toyota Prius 2010", type: "Sedan", price: 30, available: true, img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=600&q=80" },
+    { id: 1, name: "Toyota Prius 2010", type: "Sedan", price: 30, available: true, img: "https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=600&q=80"},
     { id: 2, name: "Lexus RX 350", type: "SUV", price: 85, available: true, img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" },
     { id: 3, name: "Ford Ranger Wildtrak", type: "Pickup", price: 70, available: true, img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80" },
     { id: 4, name: "Mercedes-Benz C-Class", type: "Luxury", price: 120, available: true, img: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=600&q=80" },
